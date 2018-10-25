@@ -27,7 +27,12 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public T removeIndex(int index) {
-		throw new P6NotImplemented();
+		T value = this.getIndex(index);
+//		fill--;
+//		for(int j=fill; j>=index; j--) {
+//			j[index]=j[index-1];
+//		}
+		return value;
 	}
 
 	@Override
