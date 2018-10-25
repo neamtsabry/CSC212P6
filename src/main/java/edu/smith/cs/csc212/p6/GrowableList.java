@@ -19,7 +19,10 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public T removeBack() {
-		throw new P6NotImplemented();
+		T value = this.getIndex(fill-1);
+		fill--;
+		this.array[fill] = null;
+		return value;
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public void addFront(T item) {
-		throw new P6NotImplemented();
+		addIndex(item, 0);
 	}
 
 	@Override
@@ -43,7 +46,11 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public void addIndex(T item, int index) {
-		throw new P6NotImplemented();
+		for (int j=fill; j>index; j--) {
+			array[j] = array[j-1];
+		}
+		array[index] = item;
+		fill++;		
 	}
 	
 	@Override
