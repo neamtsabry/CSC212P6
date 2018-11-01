@@ -1,5 +1,7 @@
 package edu.smith.cs.csc212.p6;
 
+import edu.smith.cs.csc212.p6.errors.BadIndexError;
+import edu.smith.cs.csc212.p6.errors.EmptyListError;
 import edu.smith.cs.csc212.p6.errors.P6NotImplemented;
 
 public class GrowableList<T> implements P6List<T> {
@@ -14,11 +16,16 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public T removeFront() {
-		throw new P6NotImplemented();
+		return removeIndex(0);
 	}
 
 	@Override
 	public T removeBack() {
+		// if list is empty
+		if (fill == 0) {
+			throw new EmptyListError();
+		}
+		
 		T value = this.getIndex(fill-1);
 		fill--;
 		this.array[fill] = null;
@@ -27,12 +34,23 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public T removeIndex(int index) {
-		T value = this.getIndex(index);
-//		fill--;
-//		for(int j=fill; j>=index; j--) {
-//			j[index]=j[index-1];
-//		}
-		return value;
+		// if list is empty
+		if(fill==0) {
+			throw new EmptyListError();
+		}
+		
+		// if index does not exist
+		if(index>=fill) {
+			throw new BadIndexError();
+		}
+		
+		T removed = this.getIndex(index);
+		fill--;
+		for (int i=index; i<fill; i++) {
+			this.array[i] = this.array[i+1];
+		}
+		this.array[fill] = null;
+		return removed;
 	}
 
 	@Override
@@ -88,6 +106,4 @@ public class GrowableList<T> implements P6List<T> {
 	public boolean isEmpty() {
 		return fill == 0;
 	}
-
-
 }

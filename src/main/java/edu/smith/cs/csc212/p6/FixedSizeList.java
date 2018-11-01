@@ -34,6 +34,10 @@ public class FixedSizeList<T> implements P6List<T> {
 		if (this.size() == 0) {
 			throw new EmptyListError();
 		}
+		// if index 
+		if(index>=fill) {
+			throw new BadIndexError();
+		}
 		T removed = this.getIndex(index);
 		fill--;
 		for (int i=index; i<fill; i++) {

@@ -38,7 +38,15 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 
 	@Override
 	public void addFront(T item) {
-		throw new P6NotImplemented();
+		FixedSizedList firstC = this.chunks.getFront();
+		if(this.isEmpty()) {
+			P6List<String> someList = new FixedSizeList<>(chunkSize);
+			
+		}
+		else {
+			firstC.addFront(item);
+		}
+		
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package edu.smith.cs.csc212.p6;
 
 import java.util.Iterator;
 
+import edu.smith.cs.csc212.p6.errors.BadIndexError;
 import edu.smith.cs.csc212.p6.errors.EmptyListError;
 import edu.smith.cs.csc212.p6.errors.P6NotImplemented;
 
@@ -21,12 +22,53 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public T removeBack() {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+		
+		// Checks if there's only one item in the list 
+		if(start.next == null) {
+			return this.removeFront();
+		}
+		
+		// Where we have more than one item 
+		else {
+			for(Node<T> current = start; current != null; current= current.next) {
+				if(current.next.next==null) {
+					T remove = current.next.value;
+					current.next = null;
+					return remove;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public T removeIndex(int index) {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+		
+		// if removing the first item 
+		if ( index == 0 ) {
+			return this.removeFront();
+		}
+		
+		// if removing last item 
+		if ( index == this.size() - 1) {
+			return this.removeBack();
+		}
+		
+		int at = 0;
+		
+		for(Node<T> current = start; 
+				current!=null; 
+				current=current.next) {
+			if(at==(index-1)) {
+				T removed = current.next.value;
+				current.next = current.next.next;
+				return removed;
+			}
+			at++;
+		}
+		throw new BadIndexError();
 	}
 
 	@Override
@@ -36,12 +78,41 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public void addBack(T item) {
-		throw new P6NotImplemented();
+		if(this.isEmpty()) {
+			addFront(item);
+		}
+		else {
+			for(Node<T> current = start; current != null; current= current.next) {
+				if(current.next==null) {
+					current.next = new Node<T>(item, null);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
 	public void addIndex(T item, int index) {
-		throw new P6NotImplemented();
+		// if the list is empty
+		if(this.isEmpty() || (index==0)) {
+			addFront(item);
+		}
+		
+		// if adding somewhere in the middle
+		else {
+			int at = 0;
+			
+			for(Node<T> current = start; 
+					current!=null; 
+					current=current.next) {
+				if(at==(index-1)) {
+					Node<T> C = current.next;
+					current.next = new Node<T>(item, C);
+					break;
+				}
+				at++;
+			}
+		}
 	}
 
 	@Override
@@ -51,12 +122,39 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public T getBack() {
-		throw new P6NotImplemented();
+		// if list is empty
+		checkNotEmpty();
+		
+		// if we have one item in list
+		if(start.next==null) {
+			return start.value;
+		}
+		
+		// every other condition
+		for(Node<T> current = start; current != null; current= current.next) {
+			if(current.next==null) {
+				return current.value;
+			}
+		}
+		throw new EmptyListError();
 	}
 
 	@Override
 	public T getIndex(int index) {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+		
+		int at = 0;
+		
+		for(Node<T> current = start; 
+				current!=null; 
+				current=current.next) {
+			if(at==(index)) {
+				T found = current.value;
+				return found;
+			}
+			at++;
+		}
+		throw new BadIndexError();
 	}
 
 	@Override
@@ -70,7 +168,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public boolean isEmpty() {
-		throw new P6NotImplemented();
+		return start == null;
 	}
 
 	/**
